@@ -34,7 +34,7 @@ class User extends Model
         return $this->hasMany(Donation::class);
     }
     protected $fillable = [
-        'last_name','first_name', 'email', 'password','address','mobile'
+        'last_name','first_name', 'email', 'password','address','mobile','salary'
     ];
 
    

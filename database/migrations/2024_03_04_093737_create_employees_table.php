@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('image')->default(null);
             $table->string('phone');
-            $table->string('salary');
+            $table->integer('salary');
             $table->boolean('employed')->default(false);
             $table->string('address');
             $table->string('email')->unique();

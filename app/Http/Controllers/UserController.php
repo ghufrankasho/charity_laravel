@@ -302,6 +302,7 @@ class UserController extends Controller
                 'first_name' => 'string',
                 'address' => 'string|nullable',
                 'mobile' => 'string|nullable',
+                'salary' => 'nullable|integer|min:0|max:1000000',
                 'account_id' => 'nullable|integer|exists:accounts,id',
                 'work_id' => 'nullable|integer|exists:works,id',
                  

@@ -9,7 +9,7 @@ class Employee extends Model
 {
     use HasFactory;
     public $timestamps = true;
-    protected $fillable=['email','address','phone','name'];
+    protected $fillable=['email','address','phone','name','salary'];
     public function vacations() {
         return $this->hasMany(Vacation::class);
         

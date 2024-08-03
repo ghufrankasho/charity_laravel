@@ -199,6 +199,7 @@ class EmployeeController extends Controller
                 'email' => 'nullable|string|email|unique:employees',
                 'address' => 'nullable|string',
                 'phone' => 'nullable|string',
+                'salary' => 'nullable|integer|min:0|max:1000000',
                 'cv' => "nullable|file|mimetypes:application/pdf,application/txt|max:10000",
                
                 'department_id' => 'nullable|integer|exists:departments,id',
@@ -213,7 +214,7 @@ class EmployeeController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'خطأ في التحقق',
-                    'errors' => $validateE->errors()
+                    'errors' => $validateE->errors()->first()
                 ], 422);
             }
             $employee=Employee::find($request->id);

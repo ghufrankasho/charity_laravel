@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('address');
             $table->boolean('accept')->default(false);
             $table->string('mobile');
+            $table->integer('salary');
             $table->string('guardian')->default(null);
             $table->foreignId('work_id')->constrained('works','id');
             $table->foreignId('project_id')->constrained('projects','id');
