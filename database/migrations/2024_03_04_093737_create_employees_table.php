@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('phone');
             $table->integer('salary');
             $table->boolean('employed')->default(false);
+            $table->boolean('avaliable')->default(true);
             $table->string('address');
             $table->string('email')->unique();
             $table->timestamps();

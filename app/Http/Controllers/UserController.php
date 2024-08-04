@@ -464,6 +464,43 @@ class UserController extends Controller
              500);
         }
     }
+    public function get_user_project(Request $request){
+        try {  
+            
+            
+            
+            $validate = Validator::make( $request->all(),
+                ['id'=>'required|integer|exists:users,id']);
+            if($validate->fails()){
+            return response()->json([
+               'status' => false,
+               'message' => 'خطأ في التحقق',
+               'errors' => $validate->errors()->first()
+            ], 422);}
+        //   branch relishen shipe
+        
+            $user=user::find($request->id);
+           
+            $project=$user->project;
+          if($project){ 
+            return response()->json(
+                $project
+                 , 200);
+            } 
+                 
+
+            return response()->json(['message'=>" حدث خطأ أثناء عملية جلب البيانات "], 422);
+        }
+        catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } 
+        catch (\Exception $e) {
+            return response()->json(['message' =>$e
+            //  'حدث خطأ أثناء عملية جلب البيانات'
+            ], 
+             500);
+        }
+    }
     public function accept(Request $request){
         try {  
             

@@ -42,6 +42,7 @@ Route::controller(UserController::class)->prefix('user')->group(function (){
     Route::get('/request','requests');
     Route::get('/show','show');
     Route::get('/get_volunter','get');
+    Route::get('/get_project','get_user_project');
     Route::get('/volunter','get_accepted_volunter');
     Route::post('/add','store')->middleware('api');
     Route::delete('/delete','destroy');
@@ -93,6 +94,7 @@ Route::controller(EmployeeController::class)->prefix('employee')->group(function
     Route::post('/update','update');
     Route::post('/accept','accept');
     Route::get('/show','show');
+    Route::get('/get_projects','get_employee_project');
     Route::get('/search/{search}','search');
     Route::post('/attach','attach_doner_to_project');
     

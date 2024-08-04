@@ -199,6 +199,7 @@ class EmployeeController extends Controller
                 'email' => 'nullable|string|email|unique:employees',
                 'address' => 'nullable|string',
                 'phone' => 'nullable|string',
+                'avaliable' => 'nullable|boolean',
                 'salary' => 'nullable|integer|min:0|max:1000000',
                 'cv' => "nullable|file|mimetypes:application/pdf,application/txt|max:10000",
                
@@ -360,7 +361,43 @@ class EmployeeController extends Controller
              500);
         }
     }
-    
+    public function get_employee_project(Request $request){
+        try {  
+            
+            
+            
+            $validate = Validator::make( $request->all(),
+                ['id'=>'required|integer|exists:employees,id']);
+            if($validate->fails()){
+            return response()->json([
+               'status' => false,
+               'message' => 'خطأ في التحقق',
+               'errors' => $validate->errors()->first()
+            ], 422);}
+        //   branch relishen shipe
+        
+            $employee=employee::find($request->id);
+           
+            $projects=$employee->department->projects;;
+          if($projects){ 
+            return response()->json(
+                $projects
+                 , 200);
+            } 
+                 
+
+            return response()->json(['message'=>" حدث خطأ أثناء عملية جلب البيانات "], 422);
+        }
+        catch (ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } 
+        catch (\Exception $e) {
+            return response()->json(['message' =>$e
+            //  'حدث خطأ أثناء عملية جلب البيانات'
+            ], 
+             500);
+        }
+    }
     public function deleteImage( $url){
         // Get the full path to the image
        
