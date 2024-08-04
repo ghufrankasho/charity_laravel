@@ -61,6 +61,7 @@ Route::controller(ProjectController::class)->prefix('project')->group(function (
     
     Route::get('/get/{num_pages?}','index');
     Route::get('/get_pages','get_pages');
+    Route::get('/get_statistac','get_statistac');
     Route::get('/get_projects_with_fundris','get_projects_with_fundris');
     Route::get('/type_department','get_type_department');
     Route::post('/add','store');
@@ -139,6 +140,7 @@ Route::controller(BranchController::class)->prefix('branch')->group(function (){
 Route::controller(ContactController::class)->prefix('contact')->group(function (){
     
     Route::get('/','index');
+    Route::get('/views','views');
     Route::post('/add','store');
     Route::delete('/delete','destroy');
     

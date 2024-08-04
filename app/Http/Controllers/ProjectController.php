@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Department;
 use App\Models\Donation;
 use App\Models\Project;
+use App\Models\User;
 use App\Models\ProjectType;
 use Illuminate\Http\Request;
 use DateTime;
@@ -70,6 +71,20 @@ class ProjectController extends Controller
         }
         return response()->json(
             $projects
+            ,200);
+    }
+    public function get_statistac(){
+        $ourgoal=Project::where('fundrise','!=',0)->latest()->get()->sum('fundrise');
+        $raised=Donation::get()->sum('amount');
+        $volunters=User::where('work_id',5)->count();
+        
+        
+        return response()->json(
+            [
+                'ourgoal'=>$ourgoal,
+                'raised'=>$raised,
+                'volunters'=>$volunters,
+                ]
             ,200);
     }
     public function store(Request $request){

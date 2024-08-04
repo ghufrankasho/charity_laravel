@@ -19,6 +19,15 @@ class ContactController extends Controller
             $contacts
             ,200);
     }
+    public function views(){
+    
+        $contacts=contact::latest()->take(10)->get();
+        
+        
+        return response()->json(
+            $contacts
+            ,200);
+    }
     public function store(Request $request){
         
         try{
