@@ -30,9 +30,7 @@ class User extends Model
     public function payments(){
         return $this->hasMany(Payment::class);
     }
-    public function donations(){
-        return $this->hasMany(Donation::class);
-    }
+    
     protected $fillable = [
         'last_name','first_name', 'email', 'password','address','mobile','salary'
     ];

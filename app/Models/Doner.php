@@ -14,9 +14,7 @@ class Doner extends Model
     public function projects(){
         return $this->belongsToMany(Project::class);
     }
-    public function donations(){
-        return $this->hasMany(Donation::class);
-    }
+  
     public function account()  {
         return $this->belongsTo(Account::class);
         

@@ -339,7 +339,8 @@ class DonerController extends Controller
         //   branch relishen shipe
         
             $doner=doner::with('projects')->find($request->id);
-          
+            $account=Account::find($doner->account_id);
+            $doner->cart=$account->cart;
           if($doner){ 
             return response()->json(
                 $doner

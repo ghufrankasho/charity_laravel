@@ -27,5 +27,8 @@ class Project extends Model
     public function donations(){
         return $this->hasMany(Donation::class);
     }
+    public function carts(){
+        return $this->belongsToMany(Cart::class,'cart_projects');
+    }
 
 }

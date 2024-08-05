@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\WorkController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\SliderController;
 use App\Http\Controllers\PaymentController;
@@ -143,6 +144,16 @@ Route::controller(ContactController::class)->prefix('contact')->group(function (
     Route::get('/views','views');
     Route::post('/add','store');
     Route::delete('/delete','destroy');
+    
+    
+    
+});
+Route::controller(CartController::class)->prefix('cart')->group(function (){
+    
+    Route::get('/','index');
+    Route::get('/show','show');
+    Route::post('/add','store');
+    Route::post('/dettach','dettach');
     
     
     

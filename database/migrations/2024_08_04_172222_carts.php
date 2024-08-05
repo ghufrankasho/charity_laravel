@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class Carts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('donations', function (Blueprint $table) {
+        Schema::create('carts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('project_id')->constrained('projects','id');
-            $table->foreignId('account_id')->constrained('accounts','id');
+            $table->foreignId('account_id')->constrained('accounts','id')->default(null);
              
-            $table->integer('amount');
-            $table->string('detailes');
-            
+          
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('donations');
+        Schema::dropIfExists('carts');
     }
-};
+}

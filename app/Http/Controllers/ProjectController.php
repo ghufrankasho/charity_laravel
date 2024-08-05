@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Account;
 use App\Models\Department;
 use App\Models\Donation;
 use App\Models\Project;
@@ -484,29 +485,36 @@ class ProjectController extends Controller
         try {  
              
            
-          
+            
             $validate = Validator::make( $request->all(),
                 [
-                    'id'=>'nullable|integer|exists:projects,id',
+                    'project_id'=>'nullable|integer|exists:projects,id',
+                    'account_id'=>'required|integer|exists:accounts,id',
                     'amount'=>'required|integer',
                     'detailes'=>'required|string']);
+                  
             if($validate->fails()){
             return response()->json([
                'status' => false,
                'message' => 'خطأ في التحقق',
                'errors' => $validate->errors()->first()
             ], 422);}
-          
-            $donation = donation::create(array_merge(
+            
+            $donation = Donation::create(array_merge(
                 $validate->validated()
                 
                 ));
-            if($request->id!==null){
+             
+            if($request->project_id!==null){
                 
-                $project=project::find($request->id);
+                $project=project::find($request->project_id);
                 $donation->project()->associate($project);
             }
-           
+            if($request->account_id!==null){
+                
+                $account=Account::find($request->account_id);
+                $donation->account()->associate($account);
+            }
             
             $result= $donation->save();
        
@@ -520,13 +528,17 @@ class ProjectController extends Controller
                 }
             
 
-            return response()->json(['status'=>false,'message'=>"حدث خطأ أثناء عملية شكرالتبرع"], 422);
+            return response()->json(['status'=>false,'message'=>"حدث خطأ أثناء عملية التبرع",
+        'errors'=>"حدث خطأ أثناء عملية شكرالتبرع"], 422);
         }
         catch (ValidationException $e) {
-            return response()->json(['errors' => $e->errors()], 422);
+            return response()->json([
+                'staust'=>false,
+                'message'=>"حدث خطأ أثناء عمليةالتبرع",
+                'errors' => $e->errors()], 422);
         } 
         catch (\Exception $e) {
-            return response()->json(['message' => 'حدث خطأ أثناء عملية الحذف'], 500);
+            return response()->json(['errors' => $e,'message' => 'حدث خطأ أثناء عملية الحذف'], 500);
         }
     }
 }

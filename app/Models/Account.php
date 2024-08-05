@@ -31,6 +31,12 @@ class Account extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(Doner::class);
     }
+    public function donations(){
+        return $this->hasMany(Donation::class);
+    }
+    public function cart(){
+        return $this->hasone(Cart::class);
+    }
     protected $fillable = [
         'email', 'password','type'
     ];
