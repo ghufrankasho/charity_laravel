@@ -37,7 +37,7 @@ class ProjectController extends Controller
             $done_days = $start->diff(now());
             $done_days = $done_days->format('%a');
             
-            $prograss= ($done_days/$days);
+            $prograss= ($done_days/($days+1));
             $prograss=round($prograss, 2);
             $project->prograss=$prograss*100;
            
