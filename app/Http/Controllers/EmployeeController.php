@@ -78,7 +78,7 @@ class EmployeeController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => 'خطأ في التحقق',
-                    'errors' => $validateaEmployee->errors()
+                    'errors' => $validateaEmployee->errors()->first()
                 ], 422);
             }
 
@@ -143,7 +143,7 @@ class EmployeeController extends Controller
             return response()->json([
                'status' => false,
                'message' => 'خطأ في التحقق',
-               'errors' => $validate->errors()
+               'errors' => $validate->errors()->first()
             ], 422);}
           
             $employee=Employee::with('vacations','account')->findOrFail($request->id );
@@ -470,7 +470,7 @@ class EmployeeController extends Controller
             return response()->json([
                'status' => false,
                'message' => 'خطأ في التحقق',
-               'errors' => $validate->errors()
+               'errors' => $validate->errors()->first()
             ], 422);}
         //   branch relishen shipe
         

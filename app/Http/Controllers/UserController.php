@@ -552,7 +552,8 @@ class UserController extends Controller
             [ 'search' => 'required|string|min:3' ,
               'is_user'=>  'required|boolean' 
             ]); 
-           
+            $work=Work::where('name','متطوع')->first();
+          
             if($validatesearch->fails()  ){
                     return response()->json([
                         'status' => false,
@@ -563,11 +564,21 @@ class UserController extends Controller
           
             if(($request->is_user ==null ) or  $request->is_user)
            { 
-            $data = user::where('first_name','LIKE', '%' . $request->search .'%')
+            if($request->is_user)
+                {
+                    
+                $data = user::where([['work_id',$work->id],['accept',false]])
+                    ->orwhere('first_name','LIKE', '%' . $request->search .'%')
+                    ->orwhere('last_name','LIKE', '%' . $request->search .'%')
+                    ->orwhere('mobile','LIKE', '%' . $request->search .'%')
+                    ->orwhere('address','LIKE', '%' . $request->search .'%')->get();      
+            }
+            else{
+                $data = user::where('first_name','LIKE', '%' . $request->search .'%')
                 ->orwhere('last_name','LIKE', '%' . $request->search .'%')
                 ->orwhere('mobile','LIKE', '%' . $request->search .'%')
-                ->orwhere('address','LIKE', '%' . $request->search .'%')->get();      
-           }
+                ->orwhere('address','LIKE', '%' . $request->search .'%')->get();  
+            }
             
            if( $request->is_user==false)
            { 
@@ -577,7 +588,7 @@ class UserController extends Controller
             ->orwhere('email','LIKE', '%'. $request->search .'%')
             ->orwhere('address','LIKE', '%'. $request->search .'%')->get(); 
              
-           }
+           }}
            
             if(count($data)>0)
             {
@@ -588,7 +599,7 @@ class UserController extends Controller
                 if($request->is_user ){
                         foreach($data as $user){
                         
-                            if(! in_array($user,$result) and $user->accept !=1  ){
+                            if(! in_array($user,$result) and $user->accept !=1 and $user->work_id==$work->id ){
                                 array_push($result , $user);
                                 
                             }}
