@@ -24,7 +24,8 @@ class CartController extends Controller
             
             
             $validate = Validator::make( $request->all(),
-                ['id'=>'required|integer|exists:carts,id']);
+                ['id'=>'nullable|integer|exists:carts,id',
+                 'account_id'=>'nullable|integer|exists:accounts,id']);
             if($validate->fails()){
             return response()->json([
                'status' => false,
@@ -32,8 +33,9 @@ class CartController extends Controller
                'errors' => $validate->errors()
             ], 422);}
         //   branch relishen shipe
+        if($request->account_id ==null)$cart=cart::find($request->id);
+        else $cart=cart::where('account_id',$request->account_id)->first();
         
-        $cart=cart::find($request->id);
           if($cart){ 
             return response()->json(
                 $cart->projects
@@ -61,7 +63,7 @@ class CartController extends Controller
         
         try{
             
-              
+            
             $validatecart = Validator::make($request->all(), 
             [
                 'account_id' => 'integer|required|exists:accounts,id',
@@ -75,51 +77,85 @@ class CartController extends Controller
                     'errors' => $validatecart->errors()
                 ], 422);
             }
-            $account=Account::find($request->account_id);
-            if( $account){
+           
+           
+            $carta=Cart::where('account_id',$request->account_id)->first();
+            $account=Account::where('id',$request->account_id)->first();
+            if( $carta){
+                
                $cart= $account->cart;
-          
-            }
-            else{  $cart = cart::create(array_merge(
-                $validatecart->validated()
-                
-                ));
-          
-            $account=account::find($request->account_id);
-            $cart->account()->associate($account);
-            $result=$cart->save();
-        }
-        if($cart){
-                
-            $project=Project::find($request->project_id);
-             
-           $projects= $cart->projects;
-          
-          foreach($projects as $pro){
-            if($project->id==$pro->id){
-                return response()->json([
-                    'status'=>false,
-                    'message'=>' هذا المشروع موجد مسبقا في السلة !!',
-                    'data'=>$cart
-                     
-                ], 422); 
-            }
-          }
-          if($project){ 
-           $cart->projects()->attach( $project);
+              
+                        $project=Project::find($request->project_id);
+                        
+                        $projects= $cart->projects;
+                    
+                        foreach($projects as $pro){
+                        if($project->id==$pro->id){
+                            return response()->json([
+                                'status'=>false,
+                                'message'=>' هذا المشروع موجد مسبقا في السلة !!',
+                                'data'=>$cart
+                                
+                            ], 422); 
+                        }
+                        }
+                        if($project){ 
+                            $cart->projects()->attach( $project);
+                            
+                            return response()->json(
+                                [ 'status'=>true, 
+                                    'message'=>' تم أضافة المشروع الى السلة بنجاح',
+                                    'data'=>$cart]
+                                , 200);
+                            
+                                
+                            
+                        }
             
-            return response()->json(
-                [ 'status'=>true, 
-                    'message'=>' تم أضافة المشروع الى السلة بنجاح',
-                    'data'=>$cart]
-                , 200);
-             
-                   
-                
+              
+          
             }
-           }
+            else{  
+                $cart = new Cart();
+               
+                 
+                $cart->account()->associate($account);
+                $result=$cart->save();
+                $project=Project::find($request->project_id);
+                        
+                $projects= $cart->projects;
+            
+                foreach($projects as $pro){
+                if($project->id==$pro->id){
+                    return response()->json([
+                        'status'=>false,
+                        'message'=>' هذا المشروع موجد مسبقا في السلة !!',
+                        'data'=>$cart
+                        
+                    ], 422); 
+                }
+                }
+                if($project){ 
+                    $cart->projects()->attach( $project);
+                    
+                    return response()->json(
+                        [ 'status'=>true, 
+                            'message'=>' تم أضافة المشروع الى السلة بنجاح',
+                            'data'=>$cart]
+                        , 200);
+                    
+                        
+                    
+                }
+        }
+            return response()->json(['message'=>" حدث خطأ أثناء عملية جلب البيانات "], 422);
+            
+          
+      
+       
            
 
+       
         }
         catch (\Throwable $th) {
             return response()->json([
