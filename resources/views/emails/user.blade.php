@@ -1,13 +1,14 @@
 <!-- resources/views/emails/contract.blade.php -->
 
+<p>Hello Volunter</p>
 
-<p>جمعية الأحسان</p>
-
-<p> شكرا لانضمامك لجمعينا:</p>
 
 <ul>
-    <li>message: {{ $data['data'] }}</li>
+    <li>Email: {{ $data['email'] }}</li>
 
+    <li>Company Name: {{ $data['companyName'] }}</li>
+
+    <li>Message Content: {{ $data['data'] }}</li>
 </ul>
 
 <p>Best regards,</p>

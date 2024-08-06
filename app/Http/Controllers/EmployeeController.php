@@ -477,22 +477,24 @@ class EmployeeController extends Controller
             $employee=employee:: find($request->id);
             $employee->employed=$request->accept;
             $employee->save();
-           
+            $this->sendEmail($employee->email,$request);
          
           if($employee){ 
             
             return response()->json(
-                ['status' => true,
-                'message' =>    'تم العملية  بنجاح',
-                'data'=>$employee]
+                [
+                    'status' => true,
+                    'message' =>    'تم العملية  بنجاح',
+                    'data'=>$employee]
                  , 200);
             } 
                  
 
             return response()->json(
-                 ['status' => false,
-                'message' =>  " حدث خطأ أثناء عملية جلب البيانات ",
-                'data'=>null]
+                 [
+                    'status' => false,
+                    'message' =>  " حدث خطأ أثناء عملية جلب البيانات ",
+                    'data'=>null]
                  , 422);
         }
         catch (ValidationException $e) {
@@ -505,12 +507,15 @@ class EmployeeController extends Controller
              500);
         }
     }
-    public function sendEmail($data){
-        $email = 'ghufrankasho2@gmail.com';
+    public function sendEmail($email,$data){
+        if($data->accept)$res='تم قبولك للعمل معنا   :)';
+        else $res=' لم يتم قبولك للعمل معنا   :)';
         $data = [
-            'data' => 'تم قبولك للعمل معنا   :)',
-            'branch_name'=>$data->branch_name,
-            'depatment_name'=>$data->department_name
+            'data' => $res,
+            'email'=>$email,
+            'companyName'=>'جمعية الاحسان',
+           
+           
         ];
 
        $result= Mail::to($email)->send(new Notification($data,'emails.employee'));

@@ -517,19 +517,32 @@ class UserController extends Controller
             ], 422);}
         //   branch relishen shipe
         
-            $user=user:: find($request->id);
+            $user=user:: with('account')->find($request->id);
             $user->accept=$request->accept;
-            $user->save();
-            if(! $request->accept){
-                
-               return $this->destroy($request);
-            }
            
-         
-        
-            return   $this->sendEmail($user->email);
-          
-                 
+            $user->save();
+            if($user){ 
+            
+               $this->sendEmail($user->account->email,$request);
+               
+                 return response()->json(
+                    [
+                        'status' => true,
+                        'message' =>    'تم العملية  بنجاح',
+                        'data'=>$user]
+                     , 200);
+                    }
+                
+                     
+    
+              
+            
+            return response()->json(
+                [
+                   'status' => false,
+                   'message' =>  " حدث خطأ أثناء عملية جلب البيانات ",
+                   'data'=>null]
+                , 422);     
 
            
         }
@@ -687,10 +700,16 @@ class UserController extends Controller
         
     }
   
-    public function sendEmail($email){
-        // $email = 'ghufrankasho2@gmail.com';
+    public function sendEmail($email,$data){
+        
+        if($data->accept)$res='تم قبولك للعمل معنا   :)';
+        else $res=' لم يتم قبولك للعمل معنا   :)';
         $data = [
-            'data' => 'تم قبول للعمل معنا ك متطوع :)',
+            'data' => $res,
+            'email'=>$email,
+            'companyName'=>'جمعية الاحسان',
+           
+           
         ];
 
        $result= Mail::to($email)->send(new Notification($data,'emails.user'));
